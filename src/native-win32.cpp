@@ -16,7 +16,7 @@ bool NativeInit() {
 
 bool NativeSendKeystrokes(const std::string &string) {
     // Need to do some encoding juggling, cuz Windows is UTF-16
-    const size_t bytesNeeded = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), -1, nullptr, 0);
+    const int bytesNeeded = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), -1, nullptr, 0);
     const auto utf16 = new wchar_t[bytesNeeded];
     MultiByteToWideChar(CP_UTF8, 0, string.c_str(), -1, utf16, bytesNeeded);
 
