@@ -1,14 +1,13 @@
 {
-    "name": "hmoog-native",
-    "version": "1.0.0",
-    "description": "",
+    "name": "@sarahisweird/hmoog-native",
+    "version": "0.0.1",
+    "description": "Allows you to send inputs to Hackmud from Node.js.",
     "main": "index.js",
     "scripts": {
-        "build-native": "node-gyp rebuild",
-        "run": "node index.js"
+        "build-native": "node-gyp rebuild"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [ "hackmud", "oog", "out-of-game", "native" ],
+    "author": "Sarah Klocke (https://sarahisweird.neocities.org/)",
     "license": "ISC",
     "devDependencies": {
         "node-gyp": "^11.0.0",
