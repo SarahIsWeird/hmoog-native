@@ -8,7 +8,7 @@ but Linux has xdotools, so this maybe isn't needed. MacOS, not sure yet.
 First of all: based.
 
 ```ts
-import native from 'hmoog-native';
+import native from '@sarahisweird/hmoog-native';
 
 if (!native.init()) {
     // Usually means that Hackmud isn't open.
