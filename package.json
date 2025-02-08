@@ -2,7 +2,8 @@
     "name": "@sarahisweird/hmoog-native",
     "version": "0.1.0",
     "description": "Allows you to send inputs to Hackmud from Node.js.",
-    "main": "index.js",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
     "scripts": {
         "build-native": "node-gyp rebuild"
     },
@@ -11,8 +12,8 @@
     "license": "ISC",
     "files": [
         "build/Release/hmoog-native.node",
-        "index.js",
-        "index.d.ts",
+        "lib/index.js",
+        "lib/index.d.ts",
         "README.md",
         "package.json",
         "pnpm-lock.yaml",
