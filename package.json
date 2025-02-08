@@ -1,6 +1,6 @@
 {
     "name": "@sarahisweird/hmoog-native",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "description": "Allows you to send inputs to Hackmud from Node.js.",
     "main": "index.js",
     "scripts": {
