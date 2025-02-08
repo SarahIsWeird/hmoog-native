@@ -1,0 +1,17 @@
+{
+    "name": "hmoog-native",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build-native": "node-gyp rebuild",
+        "run": "node index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "node-gyp": "^11.0.0",
+        "typescript": "^5.7.3"
+    }
+}
