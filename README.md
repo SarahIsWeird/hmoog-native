@@ -3,9 +3,18 @@
 Just some native bindings needed to get out-of-game input into Hackmud. Currently Windows-only,
 but Linux has xdotools, so this maybe isn't needed. MacOS, not sure yet.
 
-## Too lazy to write your own native stuff for Windows?
+Good for people who are too lazy to write their own native stuff for Windows (which is understandable tbh)
 
-First of all: based.
+## Installation
+
+```bash
+# Or npm or yarn or whatever
+pnpm install @sarahisweird/hmoog-native
+```
+
+## TL;DR:
+
+Check the TSDocs or peep this:
 
 ```ts
 import native from '@sarahisweird/hmoog-native';
@@ -16,6 +25,8 @@ if (!native.init()) {
     process.exit(1);
 }
 
+const { width, height } = native.getInfo();
+
 const waitMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 native.sendKeystrokes('scripts.user\n');
@@ -24,16 +35,15 @@ native.sendKeystrokes('scripts.user\n');
 await waitMs(100);
 native.sendKeystrokes('flush\n');
 
-// sendMouseClick IS BROKEN RIGHT NOW!
-native.sendMouseClick(false); // Left-click
-native.sendMouseClick(true); // Right-click
+native.sendMouseClick(100, 100, false); // Left-click at (100px, 100px)
+native.sendMouseClick(300, 300, true); // Right-click at (300px, 300px)
 ```
 
 ## Building from source
 
 Make sure your Node.js installation is reasonably up-to-date, as it will already include the Windows build tools.
 
-```
-> pnpm i
-> pnpm run build-native
+```bash
+pnpm i
+pnpm run build-native
 ```
