@@ -46,6 +46,14 @@ void SendKeystrokes(const v8::FunctionCallbackInfo<v8::Value>& args) {
     args.GetReturnValue().Set(returnValue);
 }
 
+void SendEscape(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    v8::Isolate* isolate = args.GetIsolate();
+
+    const bool success = NativeSendEscape();
+    const auto returnValue = v8::Boolean::New(isolate, success);
+    args.GetReturnValue().Set(returnValue);
+}
+
 void SendMouseClick(const v8::FunctionCallbackInfo<v8::Value>& args) {
     assert(args.Length() == 3);
     assert(args[0]->IsNumber());
@@ -67,6 +75,7 @@ void Initialize(const v8::Local<v8::Object> exports) {
     NODE_SET_METHOD(exports, "init", DoNativeInit);
     NODE_SET_METHOD(exports, "getInfo", GetNativeInfo);
     NODE_SET_METHOD(exports, "sendKeystrokes", SendKeystrokes);
+    NODE_SET_METHOD(exports, "sendEscape", SendEscape);
     NODE_SET_METHOD(exports, "sendMouseClick", SendMouseClick);
 }
 

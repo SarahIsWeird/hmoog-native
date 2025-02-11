@@ -32,6 +32,16 @@ export function getInfo(): NativeInfo;
 export function sendKeystrokes(str: string): boolean;
 
 /**
+ * Sends an escape key press to the Hackmud window.
+ *
+ * **Windows-specific**: Because this apparently cannot use PostMessage but relies on SendInput instead,
+ * this function has to flash the Hackmud window, just like {@link sendMouseClick} does.
+ *
+ * @returns whether the underlying system operations were successful
+ */
+export function sendEscape(): boolean;
+
+/**
  * Sends a mouse click to the Hackmud window.
  *
  * Both `x` and `y` are *absolute* coordinates relative to the top-left of the Hackmud window!

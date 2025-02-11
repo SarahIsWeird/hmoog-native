@@ -69,6 +69,26 @@ bool NativeSendKeystrokes(const std::string &string) {
     return true;
 }
 
+bool NativeSendEscape() {
+    // We have to use scancodes here, probably because of how Hackmud handles non-char keys.
+
+    INPUT inputs[2];
+
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wScan = 0x0001;
+    inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
+
+    inputs[1].type = INPUT_KEYBOARD;
+    inputs[1].ki.wScan = 0x0001;
+    inputs[1].ki.dwFlags = KEYEVENTF_KEYUP | KEYEVENTF_SCANCODE;
+
+    if (!ShowWindow(hackmudWindow, SW_NORMAL)) return false;
+    const bool success = SendInput(2, inputs, sizeof(INPUT)) == 2;
+    if (!ShowWindow(hackmudWindow, SW_MINIMIZE)) return false;
+
+    return success;
+}
+
 bool NativeSendMouseClick(const int x, const int y, const bool isRightClick) {
     // Windows only allows us to do mouse stuff if the window is in the foreground. :(
     if (!ShowWindow(hackmudWindow, SW_NORMAL)) return false;
