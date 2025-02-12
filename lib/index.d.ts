@@ -34,9 +34,6 @@ export function sendKeystrokes(str: string): boolean;
 /**
  * Sends an escape key press to the Hackmud window.
  *
- * **Windows-specific**: Because this apparently cannot use PostMessage but relies on SendInput instead,
- * this function has to flash the Hackmud window, just like {@link sendMouseClick} does.
- *
  * @returns whether the underlying system operations were successful
  */
 export function sendEscape(): boolean;

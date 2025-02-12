@@ -1,12 +1,26 @@
 #define WIN32_LEAN_AND_MEAN
 #include <cassert>
 #include <codecvt>
+#include <cstdint>
 #include <windows.h>
 
 #include "native.hpp"
 
 static HWND hackmudWindow = nullptr;
 static NativeInfo nativeInfo;
+
+typedef union WinKeystroke {
+    struct {
+        uint16_t repeatCount;
+        uint8_t scanCode;
+        uint8_t extended : 1;
+        uint8_t reserved : 4;
+        uint8_t contextCode : 1;
+        uint8_t previousState : 1;
+        uint8_t transitionState : 1;
+    };
+    LPARAM lParam;
+} WinKeystroke;
 
 static bool moveMouse(const long x, const long y) {
     INPUT input;
@@ -35,6 +49,11 @@ static bool setMouseState(const bool isRight, const bool isDown) {
     }
 
     return SendInput(1, &input, sizeof(INPUT)) == 1;
+}
+
+static bool setFakeFocus(const bool isFocused) {
+    // Thank you michael for telling me how to fake focus Hackmud!
+    return PostMessage(hackmudWindow, WM_ACTIVATE, isFocused ? WA_CLICKACTIVE : WA_INACTIVE, 0);
 }
 
 bool NativeInit() {
@@ -70,23 +89,26 @@ bool NativeSendKeystrokes(const std::string &string) {
 }
 
 bool NativeSendEscape() {
-    // We have to use scancodes here, probably because of how Hackmud handles non-char keys.
+    // Technically not needed, but better be safe than sorry.
+    constexpr WinKeystroke keystrokeDown = {
+        .scanCode = 0x1,
+    };
 
-    INPUT inputs[2];
+    // Definitely needed, because of the previous state and the transition state.
+    // If we don't pass this, the inputs seem to be repeated for a while, and very inconsistently at that.
+    constexpr WinKeystroke keystrokeUp = {
+        .scanCode = 0x1,
+        .previousState = 1,
+        .transitionState = 1,
+    };
 
-    inputs[0].type = INPUT_KEYBOARD;
-    inputs[0].ki.wScan = 0x0001;
-    inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
+    if (!setFakeFocus(true)) return false;
+    if (!PostMessage(hackmudWindow, WM_KEYDOWN, VK_ESCAPE, 0)) return false;
+    if (!PostMessage(hackmudWindow, WM_KEYUP, VK_ESCAPE, keystrokeUp.lParam)) return false;
+    Sleep(100); // Let Hackmud catch up
+    if (!setFakeFocus(false)) return false;
 
-    inputs[1].type = INPUT_KEYBOARD;
-    inputs[1].ki.wScan = 0x0001;
-    inputs[1].ki.dwFlags = KEYEVENTF_KEYUP | KEYEVENTF_SCANCODE;
-
-    if (!ShowWindow(hackmudWindow, SW_NORMAL)) return false;
-    const bool success = SendInput(2, inputs, sizeof(INPUT)) == 2;
-    if (!ShowWindow(hackmudWindow, SW_MINIMIZE)) return false;
-
-    return success;
+    return true;
 }
 
 bool NativeSendMouseClick(const int x, const int y, const bool isRightClick) {
